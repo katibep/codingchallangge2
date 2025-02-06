@@ -21,7 +21,7 @@ return (
     <CardTitle>{title}</CardTitle>
   </CardHeader>
   <CardContent>
-    <div className="grid gap-2">
+    {imageUrls.length>0 ? <div className="grid gap-2">
       <Image
         alt={title}
         className="h-40 w-full rounded-md object-cover"
@@ -44,7 +44,8 @@ return (
           );
         })}
       </div>
-      <UploadButton
+     
+    </div>: <UploadButton
         className="col-span-full"
         endpoint={endpoint}
         onClientUploadComplete={(res) => {
@@ -59,8 +60,7 @@ return (
           // Do something with the error.
           alert(`ERROR! ${error.message}`);
         }}
-      />
-    </div>
+      />}
   </CardContent>
 </Card>
 );
