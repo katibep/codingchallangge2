@@ -56,12 +56,12 @@ const [productImages, setProductImages] = useState<string[]>([
           </div>
           <form className="for grid gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="uploadthing">
-          <MultipleImageInput
+          {/* <MultipleImageInput
   title="Product Images"
   imageUrls={productImages}
   setImageUrls={setProductImages}
   endpoint="productImages"
-/>
+/> */}
         </div>
 
             <TextInput
