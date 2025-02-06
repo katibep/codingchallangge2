@@ -1,19 +1,20 @@
+"use server"
 import React from 'react'
 import ProductCard from './Productcard'
-import { fetchapi } from '@/actions/fetchapi';
+import { getAllproducts } from '@/actions/product';
 
-export default async function ProductContainer() {
-    const productsArray = await fetchapi();
+
+export default async function ProductContainer({}) {
+    const productsArray = await getAllproducts();
       console.log(productsArray)
   return (
-    <div className='grid grid-cols-1 md:grid-cols-4 gap-3 p-4'>
+    <div className='grid grid-cols-1 md:grid-cols-4  gap-3 p-4'>
         
-        {
-            productsArray.map((product)=>{
+        {productsArray && productsArray.map((product)=>{
+              
                 return <ProductCard key={product.id} product={product}/>
             })
         }
     </div>
   )
 }
-

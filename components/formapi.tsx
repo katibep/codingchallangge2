@@ -1,119 +1,104 @@
-"use client"
-import React from 'react'
-import { useForm, type SubmitHandler } from "react-hook-form";
-
-export type Inputs = {
-    name: string
-    images:string[]
-    description: string
-    price: number
-    slug :string
+"use client";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import TextInput from "@/components/FormInputs/TextInput";
+import SubmitButton from "@/components/FormInputs/SubmitButton";
+import CustomCarousel from "@/components/cutomcarosel";
+import MultipleImageInput from "./FormInputs/MultipleImageInput";
+import { createProduct } from "@/actions/product";
+import { useRouter } from "next/navigation";
+export type RegisterInputProps = {
+      name: string;
+      images:string[]
+      description: string,
+      price: number,
+      slug: string,
+};
+export default function RegisterV1() {
+  const [isLoading, setIsLoading] = useState(false);
+const [productImages, setProductImages] = useState<string[]>([
+  "/art3.jpg",
+  "/art4.jpg",
+  "/art5.jpg",
+]);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<RegisterInputProps>();
+  const router = useRouter();
+  async function onSubmit(data: RegisterInputProps) {
+    setIsLoading(true)
+    data.price=Number(data.price)
+    data.images=productImages
+    data.slug=data.name.toLowerCase().split(" ").join("-")
+    const baseurl=process.env.NEXT_PUBLIC_BASE_URL
+    console.log(data)
+    try {
+      const response=await fetch(`${baseurl}/api/v1/products`)
+      await createProduct(data)
+      alert(" created successfully") 
+      setIsLoading(false)
+      router.push("/");
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
+    }
   }
-
-  const baseurl=process.env.NEXT_PUBLIC_BASE_URL;
-  
-
-export default function Formapi() {
-
-    const {register,
-        handleSubmit,
-        reset,
-        formState: { errors }} = useForm<Inputs>();
-
-        async function onSubmit(data: Inputs){
-                data.slug = data.name.split(" ").join("-").toLowerCase();
-                data.price=Number(data.price)
-            try {
-            const response = await fetch(`${baseurl}/api/v1/products`,{
-                method:"POST",
-                headers:{
-                    "content-type":"application/json"
-                },
-                body:JSON.stringify(data)
-            })
-            console.log(response)
-            if(response){
-                reset()
-            }
-            } catch (error) {
-                console.log(error)
-            }
-        }
   return (
-    <div>
- 
+    <div className="w-full lg:grid h-screen lg:min-h-[600px] lg:grid-cols-2 relative ">
+      <div className="flex items-center justify-center py-12">
+        <div className="mx-auto grid w-[350px] gap-6">
+          <div className="absolute top-5 left-5">Simple UI</div>
+          <div className="grid gap-2 text-center">
+          </div>
+          <form className="for grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="uploadthing">
+          <MultipleImageInput
+  title="Product Images"
+  imageUrls={productImages}
+  setImageUrls={setProductImages}
+  endpoint="productImages"
+/>
+        </div>
 
-<div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-  <div className="mx-auto max-w-lg">
-    <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Product Form</h1>
+            <TextInput
+              label="name"
+              register={register}
+              name="name"
+              errors={errors}
+              placeholder="eg John Doe"
+            />
+            <TextInput
+              label="description"
+              register={register}
+              name="description"
+              type="text"
+              errors={errors}
+              placeholder="Eg. johndoe@gmail.com"
+            />
+            <TextInput
+              label="price"
+              register={register}
+              name="price"
+              type="number"
+              errors={errors}
+              placeholder=""
+            />
 
-    
-
-    <form onSubmit={handleSubmit(onSubmit)} action="#" className="mt-6 mb-0 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
-      <p className="text-center text-lg font-medium">Add your product</p>
-
-      <div>
-        <label htmlFor="name" className="sr-only">Product name</label>
-
-        <div className="relative">
-          <input  {...register("name", { required: true })}
-            type="text"
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-xs"
-            placeholder="Enter name"
-          />
-           {errors.name && <span>This field is required</span>}
-
-          <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-        
-          </span>
+            <SubmitButton
+              title="Add product"
+              loading={isLoading}
+              loadingTitle="Creating Account please wait..."
+            />
+          </form>
         </div>
       </div>
-      <div>
-        <label htmlFor="description" className="sr-only">Product description</label>
-
-        <div className="relative">
-          <input  {...register("description", { required: true })}
-            type="text"
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-xs"
-            placeholder="Enter description"
-          />
-            {errors.description && <span>This field is required</span>}
-
-          <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-           
-          </span>
-        </div>
+      <div className="hidden bg-muted lg:block relative">
+        <CustomCarousel />
       </div>
-      <div>
-        <label htmlFor="price" className="sr-only">Product price</label>
-
-        <div className="relative">
-          <input {...register("price", { required: true })}
-            type="number"
-            className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-xs"
-            placeholder="Enter price"
-          />
-          {errors.price && <span>This field is required</span>}
-
-          <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
-            
-          </span>
-        </div>
-      </div>
-
-      
-      <button
-        type="submit"
-        className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
-      >
-        Submit product
-      </button>
-
-      
-    </form>
-  </div>
-</div>
     </div>
-  )
+  );
 }
-

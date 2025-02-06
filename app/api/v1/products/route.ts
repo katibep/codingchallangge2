@@ -1,9 +1,9 @@
-import { Inputs } from "@/components/formapi";
+import { RegisterInputProps } from "@/components/formapi";
 import { db } from "@/prisma/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request:NextRequest){
-    const data:Inputs = await request.json();
+    const data:RegisterInputProps = await request.json();
     
     try {
         const product=await db.product.create({

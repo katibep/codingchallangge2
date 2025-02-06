@@ -5,6 +5,4 @@ export type ProductProps = {
       description: string,
       price: number,
       slug: string,
-      createdAt: string,
-      updatedAt: string
 }

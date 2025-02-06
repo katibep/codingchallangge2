@@ -12,8 +12,9 @@ import {
 } from "@/components/ui/carousel";
 import { useRef, useState, useEffect } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
+import { ProductProps } from "@/types/type";
 
-export default function CardCarousel() {
+export default  function CardCarousel({product}:{product:ProductProps}) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -51,6 +52,7 @@ export default function CardCarousel() {
   ];
 
   return (
+    
     <Card className="w-full max-w-xl bg-zinc-900 text-zinc-100">
       <CardContent className="p-0">
         <Carousel setApi={setApi} className="w-full">
@@ -84,31 +86,32 @@ export default function CardCarousel() {
           ))}
         </div>
       </CardContent>
-      <div className="p-6">
-        <CardHeader className="p-0 mb-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Forde, Norway</h2>
-            <div className="flex items-center gap-1">
-              <Star className="w-5 h-5 fill-current text-yellow-400" />
-              <span>4.78</span>
+        <div className="p-6">
+          <CardHeader className="p-0 mb-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">{product.name}</h2>
+              <p>{product.price}</p>
+              <div className="flex items-center gap-1">
+                <Star className="w-5 h-5 fill-current text-yellow-400" />
+                <span>4.78</span>
+              </div>
             </div>
-          </div>
-        </CardHeader>
-        <div className="space-y-4">
-          <p className="text-zinc-400">
-            Relax, rejuvenate and unplug in this unique contemporary Birdbox.
-            Feel close to nature in ultimate comfort. Enjoy the view of the epic
-            mountain range of Blegja and the Førdefjord.
-          </p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold">397$</span>
-              <span className="text-zinc-400">/ night</span>
+          </CardHeader>
+          <div className="space-y-4">
+            <p className="text-zinc-400">
+              Relax, rejuvenate and unplug in this unique contemporary Birdbox.
+              Feel close to nature in ultimate comfort. Enjoy the view of the epic
+              mountain range of Blegja and the Førdefjord.
+            </p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold">397$</span>
+                <span className="text-zinc-400">/ night</span>
+              </div>
+              <Button className="bg-blue-600 hover:bg-blue-700">Book now</Button>
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700">Book now</Button>
           </div>
         </div>
-      </div>
     </Card>
   );
 }
